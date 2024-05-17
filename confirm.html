@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video - Confirmation</title>
+    <link rel="stylesheet" href="style.2.css">
+</head>
+<body>
+
+    <div class="overlay">
+        <div class="col">
+            <div class="logo">
+
+            </div>
+            <div class="form">
+                <button onclick="clearSignature()">Clear Signature</button>
+                <canvas id="signatureCanvas" width="350" height="200" style="border:1px solid #777; margin-bottom: 30px;margin-top: 30px; border-radius: 20px; color: #999;"></canvas>
+
+
+                <a href="success.html">  <button>Finish</button></a>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="copy">
+            <p>Finalization</p>
+
+            </div>
+            
+            <div class="about">
+            <p>
+               By signing you agree that you're not under 18 and all that's written is true and not false.
+            </p>
+            </div>
+
+            <div class="send">
+                <h1>Finish Up!</h1>
+            </div>
+    </div>
+
+</div>
+    
+<script>
+    const canvas = document.getElementById('signatureCanvas');
+    const ctx = canvas.getContext('2d');
+    let isDrawing = false;
+    let lastX = 0;
+    let lastY = 0;
+  
+    canvas.addEventListener('mousedown', (e) => {
+      isDrawing = true;
+      [lastX, lastY] = [e.pageX - canvas.offsetLeft, e.pageY - canvas.offsetTop];
+    });
+  
+    canvas.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      isDrawing = true;
+      const touch = e.touches[0];
+      [lastX, lastY] = [touch.pageX - canvas.offsetLeft, touch.pageY - canvas.offsetTop];
+    });
+  
+    function draw(e) {
+      if (!isDrawing) return;
+      ctx.beginPath();
+      ctx.lineWidth = 2;
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = '#999';
+  
+      let x, y;
+      if (e.type === 'mousemove') {
+        [x, y] = [e.pageX - canvas.offsetLeft, e.pageY - canvas.offsetTop];
+      } else if (e.type === 'touchmove') {
+        const touch = e.touches[0];
+        [x, y] = [touch.pageX - canvas.offsetLeft, touch.pageY - canvas.offsetTop];
+      }
+  
+      ctx.moveTo(lastX, lastY);
+      ctx.lineTo(x, y);
+      ctx.stroke();
+      [lastX, lastY] = [x, y];
+    }
+  
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('touchmove', draw);
+  
+    canvas.addEventListener('mouseup', () => {
+      isDrawing = false;
+    });
+  
+    canvas.addEventListener('mouseleave', () => {
+      isDrawing = false;
+    });
+  
+    canvas.addEventListener('touchend', () => {
+      isDrawing = false;
+    });
+  
+    function clearSignature() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  </script>
+</body>
+</html>
